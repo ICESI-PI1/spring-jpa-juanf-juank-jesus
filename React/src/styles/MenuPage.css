@@ -1,0 +1,19 @@
+/* Reseteo de margen y relleno para todos los elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    height: 100vh;           
+    flex-direction: column;  
+    width: 100vw;  /* Asegurarse de que el contenedor ocupe todo el ancho de la ventana */
+}
+
+h1 {
+    margin-bottom: 20px; 
+}
