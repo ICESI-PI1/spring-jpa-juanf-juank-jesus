@@ -15,16 +15,18 @@ const showAlertAndRedirect = () => {
 
 
 const PrivateRoute = ({ element }) => {
-    const [isAuthenticated, setAuthenticated] = useState(false);
-  
+    const [isAuthenticated, setAuthenticated] = useState(null); // null representa el estado de carga
+
+
     useEffect(() => {
       const isUserAuthenticated = async () => {
         const token = localStorage.getItem('token');
-  
+    
         if (token) {
           try {
             const response = await axios.get('/verifyToken');
             const authenticationStatus = response.headers['authentication-status'];
+            console.log("Estoy autorizado");
             setAuthenticated(true);
           } catch (error) {
             console.log("El token no es válido");
@@ -32,13 +34,18 @@ const PrivateRoute = ({ element }) => {
             setAuthenticated(false);
           }
         } else {
+          console.log("No hay token");
           setAuthenticated(false);
         }
       };
-  
+    
       isUserAuthenticated();
     }, []); 
-  
+
+    if (isAuthenticated === null) {
+      return <div>Cargando...</div>;
+    }
+    
     return isAuthenticated ? element : showAlertAndRedirect();
   };
 
