@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute';
+import React, { useEffect, useState } from 'react';
+import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom';
 import axios from  '../config/axios'
 
 import Login from '../pages/Login';
@@ -8,43 +7,52 @@ import Home from '../pages/Home';
 import AuthorsPage from '../pages/AuthorsPage';
 import BooksPage from '../pages/BooksPage';
 
-const isUserAuthenticated = () => {
-    const token = localStorage.getItem('token');
-
-    if (token) {
-        // Aquí un ejemplo utilizando axios
-          axios.get('/verifyToken')
-            .then(response => {
-                const authenticationStatus = response.headers['authentication-status'];
-                console.log("El token es valido")
-                return true;
-            })
-            .catch(error => {
-                console.log("El token no es valido")
-                console.error('Error al verificar el token:', error);
-                return false;
-            });
-    } else{
-        console.log("Actualmente no hay token")
-        return false;
-    }
+const showAlertAndRedirect = () => {
+    alert("No esta autorizado, porfavor logueese primero");
+    
+    return <Navigate to="/" replace />;
 };
 
 
-const Router = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/*" element={<Login />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/books"
-             element={<PrivateRoute element={<BooksPage />} isAuthorized={isUserAuthenticated()} />}
-      />
-      <Route path="/authors"
-             element={<PrivateRoute element={<AuthorsPage />} isAuthorized={isUserAuthenticated()} />}
-      />
-      <Route path="/home" element={<Home />} />
-    </Routes>
-  </BrowserRouter>
-);
+const PrivateRoute = ({ element }) => {
+    const [isAuthenticated, setAuthenticated] = useState(false);
+  
+    useEffect(() => {
+      const isUserAuthenticated = async () => {
+        const token = localStorage.getItem('token');
+  
+        if (token) {
+          try {
+            const response = await axios.get('/verifyToken');
+            const authenticationStatus = response.headers['authentication-status'];
+            setAuthenticated(true);
+          } catch (error) {
+            console.log("El token no es válido");
+            console.error('Error al verificar el token:', error);
+            setAuthenticated(false);
+          }
+        } else {
+          setAuthenticated(false);
+        }
+      };
+  
+      isUserAuthenticated();
+    }, []); 
+  
+    return isAuthenticated ? element : showAlertAndRedirect();
+  };
+
+
+  const Router = () => (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/*" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/books" element={<PrivateRoute element={<BooksPage />} />} />
+        <Route path="/authors" element={<PrivateRoute element={<AuthorsPage />} />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  );
 
 export default Router;
