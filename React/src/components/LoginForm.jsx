@@ -9,16 +9,22 @@ const LoginForm = () => {
   let navigate = useNavigate();
 
   const handleLogin = () => {
-    let user = { username, password }
+    let user = { username, password };
 
     axios.post("/auth", user)
-        .then(res => {
-            if(res.status === 200){
-                localStorage.setItem("token", res.data.token)
-                console.log("Token almacenado en localStorage:", res.data.token);
-                navigate('/Home')
-            }
-        })
+      .then(res => {
+        if (res.status === 200) {
+          localStorage.setItem("token", res.data.token);
+          console.log("Token almacenado en localStorage:", res.data.token);
+          navigate('/Home');
+        }
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 401) {
+          console.log("Usted no esta autorizado")
+          navigate('/');
+        }
+      });
   };
 
   return (
