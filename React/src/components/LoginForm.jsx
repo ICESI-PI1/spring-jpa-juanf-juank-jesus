@@ -16,7 +16,7 @@ const LoginForm = () => {
         if (res.status === 200) {
           localStorage.setItem("token", res.data.token);
           console.log("Token almacenado en localStorage:", res.data.token);
-          navigate('/Home');
+          navigate('/home');
         }
       })
       .catch(error => {
