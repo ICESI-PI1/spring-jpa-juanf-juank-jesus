@@ -18,7 +18,7 @@ public class AuthorRepository implements AuthorRepositoryI {
 
     public AuthorRepository() {
         authors = new ArrayList<>();
-        authors.add(new Author(25, "JuanK", "Colombia", null));
+        authors.add(new Author(25L, "JuanK", "Colombia", null));
         random = new Random();
     }
 

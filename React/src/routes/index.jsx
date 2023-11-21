@@ -15,40 +15,41 @@ const showAlertAndRedirect = () => {
 
 
 const PrivateRoute = ({ element }) => {
-  const [isAuthenticated, setAuthenticated] = useState(null); // null representa el estado de carga
+    const [isAuthenticated, setAuthenticated] = useState(null); // null representa el estado de carga
 
 
-  useEffect(() => {
-    const isUserAuthenticated = async () => {
-      const token = localStorage.getItem('token');
-
-      if (token) {
-        try {
-          const response = await axios.get('/verifyToken');
-          const authenticationStatus = response.headers['authentication-status'];
-          console.log("Estoy autorizado");
-          setAuthenticated(true);
-        } catch (error) {
-          console.log("El token no es válido");
-          console.error('Error al verificar el token:', error);
+    useEffect(() => {
+      const isUserAuthenticated = async () => {
+        const token = localStorage.getItem('token');
+    
+        if (token) {
+          try {
+            const response = await axios.get('/verifyToken');
+            const authenticationStatus = response.headers['authentication-status'];
+            console.log("Estoy autorizado");
+            setAuthenticated(true);
+          } catch (error) {
+            console.log("El token no es válido");
+            console.error('Error al verificar el token:', error);
+            setAuthenticated(false);
+          }
+        } else {
+          console.log("No hay token");
           setAuthenticated(false);
         }
-      } else {
-        console.log("No hay token");
-        setAuthenticated(false);
-      }
-    };
+      };
+    
+      isUserAuthenticated();
+    }, []); 
 
-    isUserAuthenticated();
-  }, []); 
+    if (isAuthenticated === null) {
+      return <div>Cargando...</div>;
+    }
+    
+    return isAuthenticated ? element : showAlertAndRedirect();
+  };
 
-  if (isAuthenticated === null) {
-    return <div>Cargando...</div>;
-  }
-
-  return isAuthenticated ? element : showAlertAndRedirect();
-};
-
+  
   const Router = () => (
     <BrowserRouter>
       <Routes>
