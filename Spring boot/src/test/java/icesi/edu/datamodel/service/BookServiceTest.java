@@ -29,17 +29,15 @@ class BookServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Inicializa la lista de libros como vacía para el constructor del autor.
+        // Inicializamos la lista de libros como vacía para el constructor del autor
         List<Book> books = new ArrayList<>();
 
-        // Crea un autor con valores ficticios para los campos requeridos.
+        // Creamos un autor con valores ficticios para los campos requeridos
         author = new Author(1L, "Gabriel Garcia Marquito", "Colombiano papa", books);
 
-        // Crea un libro con valores ficticios para los campos requeridos.
-        // La fecha de publicación se establece con la fecha actual para simplificar.
+        // Creamos un libro con valores ficticios para los campos requeridos
+        // La fecha de publicación se establece con la fecha actual para simplificar
         book = new Book(1L, "100 años de soledad una obra maestra", new Date(), author);
-
-        // Si es necesario que el autor tenga libros, puedes agregar el libro creado al autor.
         books.add(book);
     }
 
