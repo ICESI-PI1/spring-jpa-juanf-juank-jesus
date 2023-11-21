@@ -49,7 +49,7 @@ const PrivateRoute = ({ element }) => {
     return isAuthenticated ? element : showAlertAndRedirect();
   };
 
-
+  
   const Router = () => (
     <BrowserRouter>
       <Routes>
