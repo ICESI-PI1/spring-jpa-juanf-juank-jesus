@@ -1,8 +1,9 @@
 package icesi.edu.datamodel.controller;
 
 import icesi.edu.datamodel.persistence.model.Author;
-import icesi.edu.datamodel.persistence.model.Book;
 import icesi.edu.datamodel.service.AuthorService;
+import icesi.edu.datamodel.service.DTO.BookNameDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -56,7 +57,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}/libros")
-    public List<Book> getBooksByAuthor(@PathVariable Long id) {
+    public List<BookNameDTO> getBooksByAuthor(@PathVariable Long id) {
         return authorService.findBooksByAuthor(id);
     }
 }

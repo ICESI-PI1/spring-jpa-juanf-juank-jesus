@@ -3,9 +3,12 @@ package icesi.edu.datamodel.service;
 import icesi.edu.datamodel.persistence.model.Author;
 import icesi.edu.datamodel.persistence.model.Book; // Asegúrate de que esta importación sea correcta
 import icesi.edu.datamodel.persistence.repository.AuthorRepository;
+import icesi.edu.datamodel.service.DTO.BookNameDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +41,16 @@ public class AuthorService {
         return authorRepository.delete(id);
     }
 
-    public List<Book> findBooksByAuthor(Long id) {
-        return authorRepository.getBooks(id);
+    public List<BookNameDTO> findBooksByAuthor(Long id) {
+        List<Book> b = authorRepository.getBooks(id);
+        List<BookNameDTO> books = new ArrayList<>();
+
+        for (Book book : b) {
+            BookNameDTO bk = new BookNameDTO();
+            bk.setTitle(book.getTitle());
+            books.add(bk);
+        }
+
+        return books;
     }
 }

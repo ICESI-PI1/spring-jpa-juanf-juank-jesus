@@ -3,6 +3,8 @@ package icesi.edu.datamodel.service;
 import icesi.edu.datamodel.persistence.model.Author;
 import icesi.edu.datamodel.persistence.model.Book;
 import icesi.edu.datamodel.persistence.repository.AuthorRepository;
+import icesi.edu.datamodel.service.DTO.BookNameDTO;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -97,8 +101,11 @@ public class AuthorServiceTest {
         List<Book> expectedBooks = Arrays.asList(book);
         when(authorRepository.getBooks(1L)).thenReturn(expectedBooks);
 
-        List<Book> books = authorService.findBooksByAuthor(1L);
+        List<BookNameDTO> books = authorService.findBooksByAuthor(1L);
 
-        assertEquals(expectedBooks, books);
+        List<String> expectedTitles = expectedBooks.stream().map(Book::getTitle).collect(Collectors.toList());
+        List<String> actualTitles = books.stream().map(BookNameDTO::getTitle).collect(Collectors.toList());
+
+        assertEquals(expectedTitles, actualTitles);
     }
 }
